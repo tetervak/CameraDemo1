@@ -56,36 +56,34 @@ public class PictureFragment extends Fragment {
     PackageManager packageManager = getActivity().getPackageManager();
 
     mCameraButton = view.findViewById(R.id.camera_button);
-    final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     boolean canTakePhoto = mPhotoFile != null &&
-      captureImage.resolveActivity(packageManager) != null;
+      captureIntent.resolveActivity(packageManager) != null;
     mCameraButton.setEnabled(canTakePhoto);
 
-    mCameraButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Uri uri = FileProvider.getUriForFile(getActivity(),
-          "ca.javateacher.camerademo1.fileprovider",
-          mPhotoFile);
-        captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-        List<ResolveInfo> cameraActivities = getActivity()
-          .getPackageManager().queryIntentActivities(captureImage,
-            PackageManager.MATCH_DEFAULT_ONLY);
-
-        for (ResolveInfo activity : cameraActivities) {
-          getActivity().grantUriPermission(activity.activityInfo.packageName,
-            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        }
-
-        startActivityForResult(captureImage, REQUEST_PHOTO);
-      }
-    });
+    mCameraButton.setOnClickListener(v -> getPicture(captureIntent));
 
     mPhotoView = view.findViewById(R.id.photo_view);
     updatePhotoView();
 
     return view;
+  }
+
+  private void getPicture(Intent captureImage) {
+    Uri uri = FileProvider.getUriForFile(getActivity(),
+      "ca.javateacher.camerademo1.fileprovider", mPhotoFile);
+    captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+    List<ResolveInfo> cameraActivities = getActivity()
+      .getPackageManager().queryIntentActivities(captureImage,
+        PackageManager.MATCH_DEFAULT_ONLY);
+
+    for (ResolveInfo activity : cameraActivities) {
+      getActivity().grantUriPermission(activity.activityInfo.packageName,
+        uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+    }
+
+    startActivityForResult(captureImage, REQUEST_PHOTO);
   }
 
   private void updatePhotoView() {
@@ -112,6 +110,5 @@ public class PictureFragment extends Fragment {
       updatePhotoView();
     }
   }
-
 
 }
