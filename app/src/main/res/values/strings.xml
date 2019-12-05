@@ -1,8 +1,5 @@
 <resources>
-    <string name="app_name">CameraDemo1</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Camera Demo 1</string>
     <string name="not_set_image">the image is not set</string>
     <string name="use_camera">take a picture</string>
     <string name="no_image_captured">no image captured</string>
