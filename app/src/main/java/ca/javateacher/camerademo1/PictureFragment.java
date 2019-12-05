@@ -69,13 +69,13 @@ public class PictureFragment extends Fragment {
     return view;
   }
 
-  private void getPicture(Intent captureImage) {
+  private void getPicture(Intent captureIntent) {
     Uri uri = FileProvider.getUriForFile(getActivity(),
       "ca.javateacher.camerademo1.fileprovider", mPhotoFile);
-    captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+    captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
     List<ResolveInfo> cameraActivities = getActivity()
-      .getPackageManager().queryIntentActivities(captureImage,
+      .getPackageManager().queryIntentActivities(captureIntent,
         PackageManager.MATCH_DEFAULT_ONLY);
 
     for (ResolveInfo activity : cameraActivities) {
@@ -83,7 +83,7 @@ public class PictureFragment extends Fragment {
         uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
     }
 
-    startActivityForResult(captureImage, REQUEST_PHOTO);
+    startActivityForResult(captureIntent, REQUEST_PHOTO);
   }
 
   private void updatePhotoView() {
